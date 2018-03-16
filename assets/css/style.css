@@ -9,14 +9,21 @@ html{
     opacity: 0.9;  
 }
 
-
-
-.backgroundImage {
+.titleAndStart { 
+    position: absolute;
+    top: 70px;
+    right: 80px;
+    width: 1000px;
+    height: 200px;
+    border: 1px solid black; 
+}
+/*.img {
+   
     /* background-image: url('../../assets/images/spice2.jpg'); */
     /* background-position: center; */
     /* background-repeat: no-repeat; */
     /* background-size: cover; */
-}
+
 
 .full {
     height:100%;
