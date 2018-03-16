@@ -36,12 +36,13 @@
 
 // Creating the start button //
 $(document).ready(function() {
-    function startScreen () {
-        
 
+    function startScreen () {
+        startScreen = "<h1 class ='text-align: center;'>Welcome to World Food Trivia!</h1><br></br><p class='text-center main-button-container'><a class='btn btn-danger btn-lg btn-block start-button' href='#' role='button'>Start the Quiz!</a></p>";
+        $(".titleAndStart").html(startScreen);
     }
 
-}
+startScreen();
 
 var questionArray = [
     { 
@@ -107,3 +108,4 @@ var questionArray = [
     
 ];
 
+});
