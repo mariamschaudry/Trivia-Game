@@ -59,28 +59,47 @@ $("body").on('click','.start-button',function(event) {
 
 });
 
+$("body").on('click','.reset-button',function(event) {
+    //event.preventDefault(); 
+    console.log("button clicked")
+    questionNumber = 0;
+    correctTotal = 0;
+    incorrectTotal = 0;
+    noAnswerTotal = 0; 
+    timer = 30;
+    wins = 0;
+    losses = 0;
+    noAnswer = 0; 
+    startScreen(); 
+});
+
+
 $("body").on('click','.answer-button',function(event) {
     console.log("answer button clicked" + $(this).text())
 
     selected = $(this).text();  //this is the button the user pushed
 
-    if( selected === questionArray[questionNumber].answer ) {
-        wins++;
-        console.log( "correct");
-    }
-    else {
-        losses++;
-    }
-
     if (questionNumber < 9) {
+
+        if( selected === questionArray[questionNumber].answer ) {
+            wins++;
+            youWin();
+            clearInterval(clock);
+            loadQuestions();
+        }
+        else {
+            losses++;
+            youLose();
+            clearInterval(clock);
+            loadQuestions();
+        }
         questionNumber++;
     }
     else {
         resetGame();
     }
-    console.log( "wins=" + wins + ";losses=" +losses);
 
-    loadQuestions(); 
+    console.log( "wins=" + wins + "losses=" +losses);
 
 });
 
@@ -92,31 +111,59 @@ var timer = 30;
 var clock;
 var wins = 0;
 var losses = 0;
+var noAnswerTotal = 0; 
+var correctTotal = 0;
+var incorrectTotal = 0;
 
-function waiting() {
+function finalScreen() {
+	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='text-center'>Great, you finished!" + "</p>" + "<p class='summary-correct'>Correct Answers: " + correctTotal + "</p>" + "<p>Wrong Answers: " + incorrectTotal + "</p>" + "<p>Unanswered: " + noAnswerTotal + "</p>" + "<p class='text-center reset-button-container'><a class='btn btn-danger btn-lg btn-block reset-button' href='#' role='button'>Let's play again!</p>";
+	$(".titleAndStart").html(gameQuestions);
+}
+
+function wait() {
 	if (questionNumber < 9) {
 
-	questionNumber++;
+	  questionNumber++;
      
-    loadQuestions();
+      loadQuestions();
     
-    timer = 30;
+      timer = 30;
         
-	answerClock();
+	  //answerClock();
     
     }
-	//else {
-		//finalScreen();
+//	else {
+//		finalScreen();
 //	}
 }
 
+function timeIsUp() {
+	noAnswerTotal++;
+	gameQuestions= "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>Time is up!  The correct answer was: " + questionArray[questionNumber].answer + "</p>";
+    $(".titleAndStart").html(gameQuestions);
+    clearInterval(clock);
+	setTimeout(wait, 5000);  
+}
+
+function youWin() {
+	correctTotal++;
+	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>You are correct! The answer is: " + questionArray[questionNumber].answer + "</p>";
+    $(".titleAndStart").html(gameQuestions);
+    console.log("youWin");
+    setTimeout(wait, 5000); 
+    console.log("youwin After"); 
+}
+
+function youLose() {
+    console.log("youLose");
+	incorrectTotal++;
+	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>You are wrong! The correct answer is: "+ questionArray[questionNumber].answer + "</p>";
+    $(".titleAndStart").html(gameQuestions);
+    setTimeout(wait, 5000); 
+}
+
 function resetGame() {
-    questionNumber = 0;
-    correctTotal = 0;
-    incorrectTotal = 0;
-    timer = 30;
-    loadQuestions();
-    answerClock();
+    finalScreen();
 }
     
 function answerClock() {
@@ -128,7 +175,7 @@ function answerClock() {
           
             clearInterval(clock);
             
-			//generateLossDueToTimeOut(); ==========================================
+			timeIsUp();
         }
         
 		if (timer > 0) {
@@ -137,6 +184,7 @@ function answerClock() {
 		$(".timerBox").html(timer);
 	}
 //}
+
 
 var questionNumber = 0;
 var questionArray = [
@@ -209,7 +257,6 @@ var gameQuestions;
 
 function loadQuestions () {
 
-    //<p class='text-center timer-p'>Time Remaining: <span class='timer'>30</span></p><p class='text-center'>"//
    timer = 30;
    clearInterval(clock);
    gameQuestions = "<p class = 'text-center timerBox-p'>Time Remaining: <span class='timerBox'>30</span></p>" +
@@ -221,7 +268,7 @@ function loadQuestions () {
    "<p class='text-center main-button-container'><a class='btn btn-default btn-md btn-block answer-button' href='#' role='button'>" + questionArray[questionNumber].options[3] + "</a></p>"
 
    $(".titleAndStart").html(gameQuestions);
-   answerClock();
+   answerClock(); // calling the function 
 
 }
 
