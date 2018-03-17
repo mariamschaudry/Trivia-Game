@@ -36,7 +36,7 @@
 
 // Code for game begins here: 
 
-// Variables//
+// PROBLEM = You win function, the html is not updating - it waits 5 seconds and changes question even if you don't click 
 
 
 // Creating and appending the start button //
@@ -77,26 +77,27 @@ $("body").on('click','.reset-button',function(event) {
 $("body").on('click','.answer-button',function(event) {
     console.log("answer button clicked" + $(this).text())
 
-    selected = $(this).text();  //this is the button the user pushed
+    var selected = $(this).text();  //this is the button the user pushed
 
-    if (questionNumber < 9) {
+    if (questionNumber < 10) {
 
         if( selected === questionArray[questionNumber].answer ) {
             wins++;
             youWin();
             clearInterval(clock);
-            loadQuestions();
+           // loadQuestions();
         }
         else {
             losses++;
             youLose();
             clearInterval(clock);
-            loadQuestions();
+            //loadQuestions();
         }
-        questionNumber++;
+        // questionNumber++;
     }
-    else {
-        resetGame();
+    if (questionNumber == 9) {
+        finalScreen();
+        //resetGame();
     }
 
     console.log( "wins=" + wins + "losses=" +losses);
@@ -115,10 +116,11 @@ var noAnswerTotal = 0;
 var correctTotal = 0;
 var incorrectTotal = 0;
 
+
 function finalScreen() {
 	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timer'>" + timer + "</span></p>" + "<p class='text-center'>Great, you finished!" + "</p>" + "<p class='summary-correct'>Correct Answers: " + correctTotal + "</p>" + "<p>Wrong Answers: " + incorrectTotal + "</p>" + "<p>Unanswered: " + noAnswerTotal + "</p>" + "<p class='text-center reset-button-container'><a class='btn btn-danger btn-lg btn-block reset-button' href='#' role='button'>Let's play again!</p>";
 	$(".titleAndStart").html(gameQuestions);
-}
+};
 
 function wait() {
 	if (questionNumber < 9) {
@@ -139,10 +141,10 @@ function wait() {
 
 function timeIsUp() {
 	noAnswerTotal++;
-	gameQuestions= "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>Time is up!  The correct answer was: " + questionArray[questionNumber].answer + "</p>";
+    gameQuestions= "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>Time is up!  The correct answer was: " + questionArray[questionNumber].answer + "</p>";
     $(".titleAndStart").html(gameQuestions);
     clearInterval(clock);
-	setTimeout(wait, 5000);  
+	setTimeout(wait, 4000);  
 }
 
 function youWin() {
@@ -150,16 +152,16 @@ function youWin() {
 	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>You are correct! The answer is: " + questionArray[questionNumber].answer + "</p>";
     $(".titleAndStart").html(gameQuestions);
     console.log("youWin");
-    setTimeout(wait, 5000); 
+    setTimeout(wait, 4000); 
     console.log("youwin After"); 
 }
 
 function youLose() {
-    console.log("youLose");
+    //console.log("youLose");
 	incorrectTotal++;
 	gameQuestions = "<p class='text-center timer-p'>Time Remaining: <span class='timerBox'>" + timer + "</span></p>" + "<p class='text-center'>You are wrong! The correct answer is: "+ questionArray[questionNumber].answer + "</p>";
     $(".titleAndStart").html(gameQuestions);
-    setTimeout(wait, 5000); 
+    setTimeout(wait, 4000); 
 }
 
 function resetGame() {
