@@ -4,9 +4,10 @@
     //Answers (1 answer within the options)
     //User's answers 
     //Need to use objects because they can have many keys/properties 
+    //Need to make a start button that is on the main page, once the user clicks it, then the first question appears.
     //Need to make a score with a counter 
 
-    // Example Layout: 
+    // Example layout for question section: 
 
     // var questionBank = [
         // {
@@ -28,21 +29,55 @@
     // ]
 
         // Question Bank has an array of objects, and you will for loop through the index. For 30 sec display
-            // questions and options 
-
+            // questions and options      
+            
+ // Functions needed - starting page, clicking to load questions, win, loss, timer, reset, if user runs out of time 
 // ========================================================================================================================================================== //
 
 // Code for game begins here: 
 
-// Creating the start button //
+// Creating and appending the start button //
 $(document).ready(function() {
 
-    function startScreen () {
-        startScreen = "<h1 class ='text-align: center;'>Welcome to World Food Trivia!</h1><br></br><p class='text-center main-button-container'><a class='btn btn-danger btn-lg btn-block start-button' href='#' role='button'>Start the Quiz!</a></p>";
-        $(".titleAndStart").html(startScreen);
-    }
+function startScreen () {
+    startScreen = "<h1 class ='text-align: center;'>Welcome to World Food Trivia!</h1><br></br><p class='text-center main-button-container'><a class='btn btn-danger btn-lg btn-block start-button' href='#' role='button'>Start the Quiz!</a></p>";
+    
+    $(".titleAndStart").html(startScreen);
+ }
 
 startScreen();
+
+// Creating the on-click event for the start button which will lead to the 1st question once clicked //
+
+$(document).on('click','.start-button',function(event) {
+    loadQuestions(); 
+
+
+// 30 second timer: starts at 30 seconds; counts down by 1 second; if it gets to zero then clear it out, if above zero then display that time. //
+
+var timerBox = setInterval(decrement, 1000);
+var timer = 30; 
+
+function thirtySeconds () {
+    if (timer === 0) {
+        clearInterval (timerBox);
+    }
+     
+    if (timer > 0) {
+        timer --;
+    }
+
+    $(".timer").html(timer);
+}
+
+// Dynamically loading the questions to the main game play area for user to play //
+
+var gameQuestions;
+
+// function loadQuestions () {
+   //gameQuestions =  
+
+
 
 var questionArray = [
     { 
@@ -107,5 +142,7 @@ var questionArray = [
     }
     
 ];
+
+    });
 
 });
