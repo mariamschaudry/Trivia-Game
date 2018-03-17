@@ -60,14 +60,25 @@ $("body").on('click','.start-button',function(event) {
 });
 
 $("body").on('click','.answer-button',function(event) {
-    //event.preventDefault(); 
-    console.log("answer button clicked")
+    console.log("answer button clicked" + $(this).text())
+
+    selected = $(this).text();  //this is the button the user pushed
+
+    if( selected === questionArray[questionNumber].answer ) {
+        wins++;
+        console.log( "correct");
+    }
+    else {
+        losses++;
+    }
 
     if (questionNumber < 9) {
         questionNumber++;
     }
-    
-    //else (resetGame)
+    else {
+        resetGame();
+    }
+    console.log( "wins=" + wins + ";losses=" +losses);
 
     loadQuestions(); 
 
@@ -76,11 +87,13 @@ $("body").on('click','.answer-button',function(event) {
 
 // 30 second timer: starts at 30 seconds; counts down by 1 second; if it gets to zero then clear it out, if above zero then display that time. //
 
-var timerBox = setInterval(1000);
+var timerBox;
 var timer = 30; 
 var clock;
+var wins = 0;
+var losses = 0;
 
-function wait() {
+function waiting() {
 	if (questionNumber < 9) {
 
 	questionNumber++;
@@ -97,16 +110,25 @@ function wait() {
 //	}
 }
 
+function resetGame() {
+    questionNumber = 0;
+    correctTotal = 0;
+    incorrectTotal = 0;
+    timer = 30;
+    loadQuestions();
+    answerClock();
+}
+    
 function answerClock() {
     clock = setInterval(thirtySeconds, 1000);
-    
+}
     function thirtySeconds() {
         
         if (timer === 0) {
-
+          
             clearInterval(clock);
             
-			//generateLossDueToTimeOut();
+			//generateLossDueToTimeOut(); ==========================================
         }
         
 		if (timer > 0) {
@@ -114,7 +136,7 @@ function answerClock() {
 		}
 		$(".timerBox").html(timer);
 	}
-}
+//}
 
 var questionNumber = 0;
 var questionArray = [
@@ -187,7 +209,11 @@ var gameQuestions;
 
 function loadQuestions () {
 
-   gameQuestions = "<p class = 'text-center timerBox'>Time Remaining: <span class='timerBox'>30</span></p>" + questionArray[questionNumber].question + 
+    //<p class='text-center timer-p'>Time Remaining: <span class='timer'>30</span></p><p class='text-center'>"//
+   timer = 30;
+   clearInterval(clock);
+   gameQuestions = "<p class = 'text-center timerBox-p'>Time Remaining: <span class='timerBox'>30</span></p>" +
+   "<p class='text-center'>" + questionArray[questionNumber].question + "</p>" +
    
    "<p class='text-center main-button-container'><a class='btn btn-default btn-md btn-block answer-button' href='#' role='button'>" + questionArray[questionNumber].options[0] + "</a></p>" +
    "<p class='text-center main-button-container'><a class='btn btn-default btn-md btn-block answer-button' href='#' role='button'>" + questionArray[questionNumber].options[1] + "</a></p>" +
@@ -195,6 +221,7 @@ function loadQuestions () {
    "<p class='text-center main-button-container'><a class='btn btn-default btn-md btn-block answer-button' href='#' role='button'>" + questionArray[questionNumber].options[3] + "</a></p>"
 
    $(".titleAndStart").html(gameQuestions);
+   answerClock();
 
 }
 
